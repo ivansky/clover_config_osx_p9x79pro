@@ -506,8 +506,6 @@
 		<true/>
 		<key>#LoadVBios</key>
 		<false/>
-		<key>#NVCAP</key>
-		<string>04000000000003000C0000000000000A00000000</string>
 		<key>NVCAP</key>
 		<string>0400000000000100060000000000000700000000</string>
 		<key>#NvidiaGeneric</key>
