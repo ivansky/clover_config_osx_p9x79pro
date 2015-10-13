@@ -1,4 +1,4 @@
-DefinitionBlock ("acpi_dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000006)
+DefinitionBlock ("DSDT.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000006)
 {
     Name (SP1O, 0x2E)
     Name (IO1B, Zero)
