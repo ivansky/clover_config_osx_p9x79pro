@@ -8,67 +8,8 @@
 		<dict>
 			<key>Debug</key>
 			<false/>
-			<key>Fixes</key>
-			<dict>
-				<key>AddDTGP_0001</key>
-				<true/>
-				<key>AddHDMI_8000000</key>
-				<true/>
-				<key>AddIMEI_80000</key>
-				<false/>
-				<key>AddMCHC_0008</key>
-				<false/>
-				<key>AddPNLF_1000000</key>
-				<true/>
-				<key>DeleteUnused_400000</key>
-				<true/>
-				<key>FIX_ACST_4000000</key>
-				<true/>
-				<key>FIX_ADP1_800000</key>
-				<true/>
-				<key>FIX_INTELGFX_100000</key>
-				<false/>
-				<key>FIX_RTC_20000</key>
-				<true/>
-				<key>FIX_S3D_2000000</key>
-				<true/>
-				<key>FIX_TMR_40000</key>
-				<true/>
-				<key>FIX_WAK_200000</key>
-				<true/>
-				<key>FakeLPC_0020</key>
-				<false/>
-				<key>FixAirport_4000</key>
-				<true/>
-				<key>FixDarwin_0002</key>
-				<true/>
-				<key>FixDisplay_0100</key>
-				<true/>
-				<key>FixFirewire_0800</key>
-				<true/>
-				<key>FixHDA_8000</key>
-				<true/>
-				<key>FixHPET_0010</key>
-				<true/>
-				<key>FixIDE_0200</key>
-				<false/>
-				<key>FixIPIC_0040</key>
-				<true/>
-				<key>FixLAN_2000</key>
-				<true/>
-				<key>FixRegions_10000000</key>
-				<true/>
-				<key>FixSATA_0400</key>
-				<false/>
-				<key>FixSBUS_0080</key>
-				<true/>
-				<key>FixShutdown_0004</key>
-				<true/>
-				<key>FixUSB_1000</key>
-				<true/>
-				<key>NewWay_80000000</key>
-				<true/>
-			</dict>
+			<key>DropOEM_DSM</key>
+			<false/>
 			<key>Name</key>
 			<string>DSDT.aml</string>
 			<key>ReuseFFFF</key>
@@ -76,10 +17,6 @@
 		</dict>
 		<key>DropTables</key>
 		<array>
-			<dict>
-				<key>Signature</key>
-				<string>DMAR</string>
-			</dict>
 			<dict>
 				<key>Signature</key>
 				<string>SSDT</string>
@@ -92,11 +29,23 @@
 				<key>TableId</key>
 				<string>Cpu0Ist</string>
 			</dict>
+			<dict>
+				<key>Signature</key>
+				<string>DMAR</string>
+			</dict>
 		</array>
-		<key>HaltEnabler</key>
-		<true/>
 		<key>SSDT</key>
 		<dict>
+			<key>DropOem</key>
+			<false/>
+			<key>EnableC6</key>
+			<true/>
+			<key>MinMultiplier</key>
+			<integer>8</integer>
+			<key>PLimitDict</key>
+			<integer>0</integer>
+			<key>UnderVoltStep</key>
+			<integer>0</integer>
 			<key>Generate</key>
 			<dict>
 				<key>CStates</key>
@@ -105,75 +54,129 @@
 				<true/>
 			</dict>
 		</dict>
+		<key>smartUPS</key>
+		<true/>
+		<key>HaltEnabler</key>
+		<true/>
 	</dict>
 	<key>Boot</key>
 	<dict>
 		<key>Arguments</key>
-		<string>kext-dev-mode=1 rootless=0</string>
+		<string>-v npci=0x2000</string>
+		<key>CustomLogo</key>
+		<false/>
 		<key>Debug</key>
 		<false/>
-		<key>DefaultLoader</key>
-		<string>boot.efi</string>
 		<key>DefaultVolume</key>
-		<string>LastBootedVolume</string>
-		<key>Fast</key>
-		<false/>
+		<string>OSX</string>
 		<key>Legacy</key>
 		<string>PBR</string>
-		<key>NeverHibernate</key>
+		<key>Secure</key>
 		<false/>
 		<key>Timeout</key>
-		<integer>5</integer>
+		<integer>8</integer>
+		<key>XMPDetection</key>
+		<integer>1</integer>
+		<key>Log</key>
+		<false/>
 	</dict>
 	<key>CPU</key>
 	<dict>
+		<key>Type</key>
+		<string>0x0ad7</string>
 	</dict>
 	<key>Devices</key>
 	<dict>
 		<key>Audio</key>
 		<dict>
-			<key>ResetHDA</key>
-			<true/>
+			<key>Inject</key>
+			<string>No</string>
 		</dict>
 		<key>FakeID</key>
 		<dict>
+			<key>ATI</key>
+			<string>0x0</string>
+			<key>IMEI</key>
+			<string>0x0</string>
+			<key>IntelGFX</key>
+			<string>0x0</string>
+			<key>LAN</key>
+			<string>0x0</string>
+			<key>NVidia</key>
+			<string>0x0</string>
+			<key>SATA</key>
+			<string>0x0</string>
+			<key>WIFI</key>
+			<string>0x0</string>
+			<key>XHCI</key>
+			<string>0x0</string>
 		</dict>
-		<key>NoDefaultProperties</key>
-		<false/>
 		<key>USB</key>
 		<dict>
 			<key>AddClockID</key>
 			<true/>
 			<key>FixOwnership</key>
-			<true/>
-			<key>HighCurrent</key>
 			<false/>
 			<key>Inject</key>
-			<true/>
+			<false/>
 		</dict>
-		<key>UseIntelHDMI</key>
-		<false/>
 	</dict>
+	<key>DisableDrivers</key>
+	<array>
+		<string>Nothing</string>
+	</array>
 	<key>GUI</key>
 	<dict>
-		<key>ScreenResolution</key>
-		<string>1680x1050</string>
+		<key>Hide</key>
+		<array>
+			<string>BOOTX64.EFI</string>
+			<string>Windows</string>
+		</array>
+		<key>Language</key>
+		<string>en:0</string>
+		<key>Mouse</key>
+		<dict>
+			<key>DoubleClick</key>
+			<integer>500</integer>
+			<key>Enabled</key>
+			<true/>
+			<key>Mirror</key>
+			<false/>
+			<key>Speed</key>
+			<integer>8</integer>
+		</dict>
+		<key>Scan</key>
+		<dict>
+			<key>Entries</key>
+			<true/>
+			<key>Legacy</key>
+			<true/>
+			<key>Tool</key>
+			<true/>
+		</dict>
 		<key>Theme</key>
 		<string>embedded</string>
 	</dict>
 	<key>Graphics</key>
 	<dict>
-		<key>NVCAP</key>
-		<string>0400000000000100060000000000000700000000</string>
-		<key>VRAM</key>
-		<integer>1024</integer>
+		<key>Inject</key>
+		<dict>
+			<key>ATI</key>
+			<false/>
+			<key>Intel</key>
+			<false/>
+			<key>NVidia</key>
+			<false/>
+		</dict>
+		<key>NvidiaSingle</key>
+		<false/>
 	</dict>
 	<key>KernelAndKextPatches</key>
 	<dict>
 		<key>AppleRTC</key>
 		<true/>
 		<key>AsusAICPUPM</key>
-		<false/>
+		<true/>
 		<key>Debug</key>
 		<false/>
 		<key>KernelCpu</key>
@@ -184,22 +187,95 @@
 		<false/>
 		<key>KernelPm</key>
 		<false/>
+		<key>KextsToPatch</key>
+		<array>
+			<dict>
+				<key>Comment</key>
+				<string>AICPM patch</string>
+				<key>Find</key>
+				<data>AXRf</data>
+				<key>Name</key>
+				<string>AppleIntelCPUPowerManagement</string>
+				<key>Replace</key>
+				<data>Aetf</data>
+			</dict>
+			<dict>
+				<key>Comment</key>
+				<string>AICPM patch</string>
+				<key>Find</key>
+				<data>dRG5</data>
+				<key>Name</key>
+				<string>AppleIntelCPUPowerManagement</string>
+				<key>Replace</key>
+				<data>6xG5</data>
+			</dict>
+			<dict>
+				<key>Comment</key>
+				<string>AICPM patch</string>
+				<key>Find</key>
+				<data>/w+ELQ==</data>
+				<key>Name</key>
+				<string>AppleIntelCPUPowerManagement</string>
+				<key>Replace</key>
+				<data>/w+FLQ==</data>
+			</dict>
+			<dict>
+				<key>Comment</key>
+				<string>AICPM patch</string>
+				<key>Find</key>
+				<data>yXQMDzKD4B9CiUQ7</data>
+				<key>Name</key>
+				<string>AppleIntelCPUPowerManagement</string>
+				<key>Replace</key>
+				<data>yesMDzKD4B9CiUQ7</data>
+			</dict>
+			<dict>
+				<key>Comment</key>
+				<string>AICPM patch</string>
+				<key>Find</key>
+				<data>AQABD4Q=</data>
+				<key>Name</key>
+				<string>AppleIntelCPUPowerManagement</string>
+				<key>Replace</key>
+				<data>AQABD4U=</data>
+			</dict>
+			<dict>
+				<key>Comment</key>
+				<string>AICPM patch</string>
+				<key>Find</key>
+				<data>PnU5</data>
+				<key>Name</key>
+				<string>AppleIntelCPUPowerManagement</string>
+				<key>Replace</key>
+				<data>PpCQ</data>
+			</dict>
+			<dict>
+				<key>Comment</key>
+				<string>AICPM patch</string>
+				<key>Find</key>
+				<data>yXQWDzJIJf8PAABI</data>
+				<key>Name</key>
+				<string>AppleIntelCPUPowerManagement</string>
+				<key>Replace</key>
+				<data>yesWDzJIJf8PAABI</data>
+			</dict>
+		</array>
 	</dict>
 	<key>RtVariables</key>
 	<dict>
+		<key>MLB</key>
+		<string>MT7024K44400783RU</string>
+		<key>ROM</key>
+		<string>UseMacAddr0</string>
 		<key>BooterConfig</key>
 		<string>0x28</string>
 		<key>CsrActiveConfig</key>
 		<string>0x67</string>
-		<key>MLB</key>
-		<string>C02032109R5DC771H</string>
-		<key>ROM</key>
-		<string>UseMacAddr0</string>
 	</dict>
 	<key>SMBIOS</key>
 	<dict>
 		<key>BiosReleaseDate</key>
-		<string>06/12/13</string>
+		<string>12/6/2013</string>
 		<key>BiosVendor</key>
 		<string>Apple Inc.</string>
 		<key>BiosVersion</key>
@@ -208,6 +284,8 @@
 		<string>Mac-F60DEB81FF30ACF6</string>
 		<key>BoardManufacturer</key>
 		<string>Apple Inc.</string>
+		<key>#BoardSerialNumber</key>
+		<string>xxxxxxxxxxxxxx</string>
 		<key>BoardType</key>
 		<integer>11</integer>
 		<key>ChassisAssetTag</key>
@@ -217,114 +295,33 @@
 		<key>ChassisType</key>
 		<string>06</string>
 		<key>Family</key>
-		<string>Mac Pro</string>
+		<string>MacPro</string>
 		<key>FirmwareFeatures</key>
 		<string>0xC0001403</string>
 		<key>Manufacturer</key>
 		<string>Apple Inc.</string>
-		<key>Mobile</key>
-		<false/>
 		<key>ProductName</key>
 		<string>MacPro6,1</string>
 		<key>SerialNumber</key>
-		<string>C02L3VTFF693</string>
+		<string>C02KVGEKF693</string>
+		<key>SmUUID</key>
+		<string>8E860A0B-44E3-4F47-A1DE-D94772F62615</string>
 		<key>Trust</key>
 		<false/>
 		<key>Version</key>
 		<string>1.0</string>
-		<key>Memory</key>
-		<dict>
-			<key>Channels</key>
-			<integer>4</integer>
-			<key>SlotCount</key>
-			<integer>8</integer>
-			<key>Modules</key>
-			<array>
-				<dict>
-					<key>Frequency</key>
-					<integer>1333</integer>
-					<key>Part</key>
-					<string>KHX2133C11D3/4GX</string>
-					<key>Serial</key>
-					<string>113413C9</string>
-					<key>Size</key>
-					<integer>4096</integer>
-					<key>Slot</key>
-					<integer>0</integer>
-					<key>Type</key>
-					<string>DDR3</string>
-					<key>Vendor</key>
-					<string>Kingston</string>
-				</dict>
-				<dict>
-					<key>Frequency</key>
-					<integer>1333</integer>
-					<key>Part</key>
-					<string>KHX2133C11D3/4GX</string>
-					<key>Serial</key>
-					<string>11341EC9</string>
-					<key>Size</key>
-					<integer>4096</integer>
-					<key>Slot</key>
-					<integer>2</integer>
-					<key>Type</key>
-					<string>DDR3</string>
-					<key>Vendor</key>
-					<string>Kingston</string>
-				</dict>
-				<dict>
-					<key>Frequency</key>
-					<integer>1333</integer>
-					<key>Part</key>
-					<string>KHX2133C11D3/4GX</string>
-					<key>Serial</key>
-					<string></string>
-					<key>Size</key>
-					<integer>4096</integer>
-					<key>Slot</key>
-					<integer>4</integer>
-					<key>Type</key>
-					<string>DDR3</string>
-					<key>Vendor</key>
-					<string>Kingston</string>
-				</dict>
-				<dict>
-					<key>Frequency</key>
-					<integer>1333</integer>
-					<key>Part</key>
-					<string>KHX2133C11D3/4GX</string>
-					<key>Serial</key>
-					<string></string>
-					<key>Size</key>
-					<integer>4096</integer>
-					<key>Slot</key>
-					<integer>6</integer>
-					<key>Type</key>
-					<string>DDR3</string>
-					<key>Vendor</key>
-					<string>Kingston</string>
-				</dict>
-			</array>
-		</dict>
-		<key>Slots</key>
-		<array>
-			<dict>
-				<key>Device</key>
-				<string>Nvidia</string>
-				<key>ID</key>
-				<integer>1</integer>
-				<key>Name</key>
-				<string>PCIe 3.0 x16 Slot 1</string>
-				<key>Type</key>
-				<integer>16</integer>
-			</dict>
-		</array>
 	</dict>
 	<key>SystemParameters</key>
 	<dict>
+		<key>BacklightLevel</key>
+		<string>0x0101</string>
+		<key>CustomUUID</key>
+		<string>53330860-5BCB-11D9-9400-C86000CB65A7</string>
 		<key>InjectKexts</key>
-		<string>Detect</string>
+		<string>Yes</string>
 		<key>InjectSystemID</key>
+		<true/>
+		<key>NoCaches</key>
 		<true/>
 	</dict>
 </dict>
