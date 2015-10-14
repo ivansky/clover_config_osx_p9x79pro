@@ -1543,7 +1543,7 @@ DefinitionBlock ("DSDT.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000006)
                     0x0000,             // Range Minimum
                     0x0000,             // Range Maximum
                     0x0000,             // Translation Offset
-                    0x0000,             // Length
+                    0x0001,             // Length
                     ,, _Y02, TypeStatic)
                 WordIO (ResourceProducer, MinFixed, MaxFixed, PosDecode, EntireRange,
                     0x0000,             // Granularity
@@ -1557,7 +1557,7 @@ DefinitionBlock ("DSDT.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000006)
                     0x00000000,         // Range Minimum
                     0x00000000,         // Range Maximum
                     0x00000000,         // Translation Offset
-                    0x00000000,         // Length
+                    0x00000001,         // Length
                     ,, _Y03, AddressRangeMemory, TypeStatic)
                 DWordMemory (ResourceProducer, PosDecode, MinFixed, MaxFixed, NonCacheable, ReadWrite,
                     0x00000000,         // Granularity
@@ -1571,14 +1571,14 @@ DefinitionBlock ("DSDT.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000006)
                     0x02000000,         // Range Minimum
                     0xFFDFFFFF,         // Range Maximum
                     0x00000000,         // Translation Offset
-                    0xFDFC0000,         // Length
+                    0xFDE00000,         // Length
                     ,, _Y04, AddressRangeMemory, TypeStatic)
                 QWordMemory (ResourceProducer, PosDecode, MinFixed, MaxFixed, Cacheable, ReadWrite,
                     0x0000000000000000, // Granularity
                     0x0000000000000000, // Range Minimum
                     0x0000000000000000, // Range Maximum
                     0x0000000000000000, // Translation Offset
-                    0x0000000000000000, // Length
+                    0x0000000000000001, // Length
                     ,, _Y05, AddressRangeMemory, TypeStatic)
             })
             Name (CRS2, ResourceTemplate ()
@@ -1595,21 +1595,21 @@ DefinitionBlock ("DSDT.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000006)
                     0x0000,             // Range Minimum
                     0x0000,             // Range Maximum
                     0x0000,             // Translation Offset
-                    0x0000,             // Length
+                    0x0001,             // Length
                     ,, _Y08, TypeStatic)
                 WordIO (ResourceProducer, MinFixed, MaxFixed, PosDecode, EntireRange,
                     0x0000,             // Granularity
                     0x0000,             // Range Minimum
                     0x0000,             // Range Maximum
                     0x0000,             // Translation Offset
-                    0x0000,             // Length
+                    0x0001,             // Length
                     ,, _Y07, TypeStatic)
                 DWordMemory (ResourceProducer, PosDecode, MinFixed, MaxFixed, Cacheable, ReadWrite,
                     0x00000000,         // Granularity
                     0x00000000,         // Range Minimum
                     0x00000000,         // Range Maximum
                     0x00000000,         // Translation Offset
-                    0x00000000,         // Length
+                    0x00000001,         // Length
                     ,, _Y09, AddressRangeMemory, TypeStatic)
                 DWordMemory (ResourceProducer, PosDecode, MinFixed, MaxFixed, Cacheable, ReadWrite,
                     0x00000000,         // Granularity
@@ -1623,7 +1623,7 @@ DefinitionBlock ("DSDT.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000006)
                     0x0000000000000000, // Range Minimum
                     0x0000000000000000, // Range Maximum
                     0x0000000000000000, // Translation Offset
-                    0x0000000000000000, // Length
+                    0x0000000000000001, // Length
                     ,, _Y0B, AddressRangeMemory, TypeStatic)
             })
             Method (_STA, 0, NotSerialized)  // _STA: Status
@@ -1898,6 +1898,19 @@ DefinitionBlock ("DSDT.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000006)
             Device (SBRG)
             {
                 Name (_ADR, 0x001F0000)  // _ADR: Address
+                Method (_DSM, 4, NotSerialized)  // _DSM: Device-Specific Method
+                {
+                    Local0 = Package (0x02)
+                        {
+                            "device-id", 
+                            Buffer (0x04)
+                            {
+                                 0x02, 0x3B, 0x00, 0x00                           /* .;.. */
+                            }
+                        }
+                    DTGP (Arg0, Arg1, Arg2, Arg3, RefOf (Local0))
+                    Return (Local0)
+                }
                 Method (SPTS, 1, NotSerialized)
                 {
                     PS1S = One
@@ -2902,8 +2915,6 @@ DefinitionBlock ("DSDT.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000006)
                             0x00,               // Alignment
                             0x04,               // Length
                             )
-                        IRQNoFlags ()
-                            {0}
                     })
                 }
                 Device (RTC0)
@@ -2917,8 +2928,6 @@ DefinitionBlock ("DSDT.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000006)
                             0x00,               // Alignment
                             0x02,               // Length
                             )
-                        IRQNoFlags ()
-                            {8}
                     })
                 }
                 Device (SPKR)
@@ -3362,33 +3371,25 @@ DefinitionBlock ("DSDT.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000006)
                             Zero, 
                             Zero
                         })
-                        Name (_PLD, ToPLD (
-                            PLD_Revision       = 0x1,
-                            PLD_IgnoreColor    = 0x1,
-                            PLD_Red            = 0x0,
-                            PLD_Green          = 0x0,
-                            PLD_Blue           = 0x0,
-                            PLD_Width          = 0x0,
-                            PLD_Height         = 0x0,
-                            PLD_UserVisible    = 0x0,
-                            PLD_Dock           = 0x0,
-                            PLD_Lid            = 0x0,
-                            PLD_Panel          = "UNKNOWN",
-                            PLD_VerticalPosition = "UPPER",
-                            PLD_HorizontalPosition = "LEFT",
-                            PLD_Shape          = "UNKNOWN",
-                            PLD_GroupOrientation = 0x0,
-                            PLD_GroupToken     = 0x0,
-                            PLD_GroupPosition  = 0x0,
-                            PLD_Bay            = 0x0,
-                            PLD_Ejectable      = 0x0,
-                            PLD_EjectRequired  = 0x0,
-                            PLD_CabinetNumber  = 0x0,
-                            PLD_CardCageNumber = 0x0,
-                            PLD_Reference      = 0x0,
-                            PLD_Rotation       = 0x0,
-                            PLD_Order          = 0x0)
-)  // _PLD: Physical Location of Device
+                        Name (_PLD, Package (0x10)  // _PLD: Physical Location of Device
+                        {
+                            0x81, 
+                            Zero, 
+                            Zero, 
+                            Zero, 
+                            Zero, 
+                            Zero, 
+                            Zero, 
+                            Zero, 
+                            0x30, 
+                            0x1C, 
+                            Zero, 
+                            Zero, 
+                            Zero, 
+                            Zero, 
+                            Zero, 
+                            Zero
+                        })
                         Device (PR30)
                         {
                             Name (_ADR, One)  // _ADR: Address
@@ -3399,33 +3400,25 @@ DefinitionBlock ("DSDT.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000006)
                                 Zero, 
                                 Zero
                             })
-                            Name (_PLD, ToPLD (
-                                PLD_Revision       = 0x1,
-                                PLD_IgnoreColor    = 0x1,
-                                PLD_Red            = 0x0,
-                                PLD_Green          = 0x0,
-                                PLD_Blue           = 0x0,
-                                PLD_Width          = 0x0,
-                                PLD_Height         = 0x0,
-                                PLD_UserVisible    = 0x1,
-                                PLD_Dock           = 0x0,
-                                PLD_Lid            = 0x0,
-                                PLD_Panel          = "FRONT",
-                                PLD_VerticalPosition = "",
-                                PLD_HorizontalPosition = "LEFT",
-                                PLD_Shape          = "UNKNOWN",
-                                PLD_GroupOrientation = 0x0,
-                                PLD_GroupToken     = 0x0,
-                                PLD_GroupPosition  = 0x0,
-                                PLD_Bay            = 0x0,
-                                PLD_Ejectable      = 0x0,
-                                PLD_EjectRequired  = 0x0,
-                                PLD_CabinetNumber  = 0x0,
-                                PLD_CardCageNumber = 0x0,
-                                PLD_Reference      = 0x0,
-                                PLD_Rotation       = 0x0,
-                                PLD_Order          = 0x0)
-)  // _PLD: Physical Location of Device
+                            Name (_PLD, Package (0x10)  // _PLD: Physical Location of Device
+                            {
+                                0x81, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                0xE1, 
+                                0x1C, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero
+                            })
                         }
                         Device (PR31)
                         {
@@ -3437,33 +3430,25 @@ DefinitionBlock ("DSDT.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000006)
                                 Zero, 
                                 Zero
                             })
-                            Name (_PLD, ToPLD (
-                                PLD_Revision       = 0x1,
-                                PLD_IgnoreColor    = 0x1,
-                                PLD_Red            = 0x0,
-                                PLD_Green          = 0x0,
-                                PLD_Blue           = 0x0,
-                                PLD_Width          = 0x0,
-                                PLD_Height         = 0x0,
-                                PLD_UserVisible    = 0x1,
-                                PLD_Dock           = 0x0,
-                                PLD_Lid            = 0x0,
-                                PLD_Panel          = "FRONT",
-                                PLD_VerticalPosition = "",
-                                PLD_HorizontalPosition = "CENTER",
-                                PLD_Shape          = "UNKNOWN",
-                                PLD_GroupOrientation = 0x0,
-                                PLD_GroupToken     = 0x0,
-                                PLD_GroupPosition  = 0x0,
-                                PLD_Bay            = 0x0,
-                                PLD_Ejectable      = 0x0,
-                                PLD_EjectRequired  = 0x0,
-                                PLD_CabinetNumber  = 0x0,
-                                PLD_CardCageNumber = 0x0,
-                                PLD_Reference      = 0x0,
-                                PLD_Rotation       = 0x0,
-                                PLD_Order          = 0x0)
-)  // _PLD: Physical Location of Device
+                            Name (_PLD, Package (0x10)  // _PLD: Physical Location of Device
+                            {
+                                0x81, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                0xE1, 
+                                0x1D, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero
+                            })
                         }
                         Device (PR32)
                         {
@@ -3475,33 +3460,25 @@ DefinitionBlock ("DSDT.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000006)
                                 Zero, 
                                 Zero
                             })
-                            Name (_PLD, ToPLD (
-                                PLD_Revision       = 0x1,
-                                PLD_IgnoreColor    = 0x1,
-                                PLD_Red            = 0x0,
-                                PLD_Green          = 0x0,
-                                PLD_Blue           = 0x0,
-                                PLD_Width          = 0x0,
-                                PLD_Height         = 0x0,
-                                PLD_UserVisible    = 0x1,
-                                PLD_Dock           = 0x0,
-                                PLD_Lid            = 0x0,
-                                PLD_Panel          = "FRONT",
-                                PLD_VerticalPosition = "",
-                                PLD_HorizontalPosition = "CENTER",
-                                PLD_Shape          = "UNKNOWN",
-                                PLD_GroupOrientation = 0x0,
-                                PLD_GroupToken     = 0x0,
-                                PLD_GroupPosition  = 0x0,
-                                PLD_Bay            = 0x0,
-                                PLD_Ejectable      = 0x0,
-                                PLD_EjectRequired  = 0x0,
-                                PLD_CabinetNumber  = 0x0,
-                                PLD_CardCageNumber = 0x0,
-                                PLD_Reference      = 0x0,
-                                PLD_Rotation       = 0x0,
-                                PLD_Order          = 0x0)
-)  // _PLD: Physical Location of Device
+                            Name (_PLD, Package (0x10)  // _PLD: Physical Location of Device
+                            {
+                                0x81, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                0xE1, 
+                                0x1D, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero
+                            })
                         }
                         Device (PR33)
                         {
@@ -3513,33 +3490,25 @@ DefinitionBlock ("DSDT.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000006)
                                 Zero, 
                                 Zero
                             })
-                            Name (_PLD, ToPLD (
-                                PLD_Revision       = 0x1,
-                                PLD_IgnoreColor    = 0x1,
-                                PLD_Red            = 0x0,
-                                PLD_Green          = 0x0,
-                                PLD_Blue           = 0x0,
-                                PLD_Width          = 0x0,
-                                PLD_Height         = 0x0,
-                                PLD_UserVisible    = 0x1,
-                                PLD_Dock           = 0x0,
-                                PLD_Lid            = 0x0,
-                                PLD_Panel          = "FRONT",
-                                PLD_VerticalPosition = "",
-                                PLD_HorizontalPosition = "RIGHT",
-                                PLD_Shape          = "UNKNOWN",
-                                PLD_GroupOrientation = 0x0,
-                                PLD_GroupToken     = 0x0,
-                                PLD_GroupPosition  = 0x0,
-                                PLD_Bay            = 0x0,
-                                PLD_Ejectable      = 0x0,
-                                PLD_EjectRequired  = 0x0,
-                                PLD_CabinetNumber  = 0x0,
-                                PLD_CardCageNumber = 0x0,
-                                PLD_Reference      = 0x0,
-                                PLD_Rotation       = 0x0,
-                                PLD_Order          = 0x0)
-)  // _PLD: Physical Location of Device
+                            Name (_PLD, Package (0x10)  // _PLD: Physical Location of Device
+                            {
+                                0x81, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                0xE1, 
+                                0x1E, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero
+                            })
                         }
                         Device (PR34)
                         {
@@ -3551,33 +3520,25 @@ DefinitionBlock ("DSDT.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000006)
                                 Zero, 
                                 Zero
                             })
-                            Name (_PLD, ToPLD (
-                                PLD_Revision       = 0x1,
-                                PLD_IgnoreColor    = 0x1,
-                                PLD_Red            = 0x0,
-                                PLD_Green          = 0x0,
-                                PLD_Blue           = 0x0,
-                                PLD_Width          = 0x0,
-                                PLD_Height         = 0x0,
-                                PLD_UserVisible    = 0x1,
-                                PLD_Dock           = 0x0,
-                                PLD_Lid            = 0x0,
-                                PLD_Panel          = "UNKNOWN",
-                                PLD_VerticalPosition = "LOWER",
-                                PLD_HorizontalPosition = "RIGHT",
-                                PLD_Shape          = "UNKNOWN",
-                                PLD_GroupOrientation = 0x0,
-                                PLD_GroupToken     = 0x0,
-                                PLD_GroupPosition  = 0x0,
-                                PLD_Bay            = 0x0,
-                                PLD_Ejectable      = 0x0,
-                                PLD_EjectRequired  = 0x0,
-                                PLD_CabinetNumber  = 0x0,
-                                PLD_CardCageNumber = 0x0,
-                                PLD_Reference      = 0x0,
-                                PLD_Rotation       = 0x0,
-                                PLD_Order          = 0x0)
-)  // _PLD: Physical Location of Device
+                            Name (_PLD, Package (0x10)  // _PLD: Physical Location of Device
+                            {
+                                0x81, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                0xB1, 
+                                0x1E, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero
+                            })
                         }
                         Device (PR35)
                         {
@@ -3589,33 +3550,25 @@ DefinitionBlock ("DSDT.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000006)
                                 Zero, 
                                 Zero
                             })
-                            Name (_PLD, ToPLD (
-                                PLD_Revision       = 0x1,
-                                PLD_IgnoreColor    = 0x1,
-                                PLD_Red            = 0x0,
-                                PLD_Green          = 0x0,
-                                PLD_Blue           = 0x0,
-                                PLD_Width          = 0x0,
-                                PLD_Height         = 0x0,
-                                PLD_UserVisible    = 0x1,
-                                PLD_Dock           = 0x0,
-                                PLD_Lid            = 0x0,
-                                PLD_Panel          = "FRONT",
-                                PLD_VerticalPosition = "",
-                                PLD_HorizontalPosition = "RIGHT",
-                                PLD_Shape          = "UNKNOWN",
-                                PLD_GroupOrientation = 0x0,
-                                PLD_GroupToken     = 0x0,
-                                PLD_GroupPosition  = 0x0,
-                                PLD_Bay            = 0x0,
-                                PLD_Ejectable      = 0x0,
-                                PLD_EjectRequired  = 0x0,
-                                PLD_CabinetNumber  = 0x0,
-                                PLD_CardCageNumber = 0x0,
-                                PLD_Reference      = 0x0,
-                                PLD_Rotation       = 0x0,
-                                PLD_Order          = 0x0)
-)  // _PLD: Physical Location of Device
+                            Name (_PLD, Package (0x10)  // _PLD: Physical Location of Device
+                            {
+                                0x81, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                0xE1, 
+                                0x1E, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero
+                            })
                         }
                     }
                 }
@@ -5282,33 +5235,25 @@ DefinitionBlock ("DSDT.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000006)
                             Zero, 
                             Zero
                         })
-                        Name (_PLD, ToPLD (
-                            PLD_Revision       = 0x1,
-                            PLD_IgnoreColor    = 0x1,
-                            PLD_Red            = 0x0,
-                            PLD_Green          = 0x0,
-                            PLD_Blue           = 0x0,
-                            PLD_Width          = 0x0,
-                            PLD_Height         = 0x0,
-                            PLD_UserVisible    = 0x0,
-                            PLD_Dock           = 0x0,
-                            PLD_Lid            = 0x0,
-                            PLD_Panel          = "UNKNOWN",
-                            PLD_VerticalPosition = "UPPER",
-                            PLD_HorizontalPosition = "LEFT",
-                            PLD_Shape          = "UNKNOWN",
-                            PLD_GroupOrientation = 0x0,
-                            PLD_GroupToken     = 0x0,
-                            PLD_GroupPosition  = 0x0,
-                            PLD_Bay            = 0x0,
-                            PLD_Ejectable      = 0x0,
-                            PLD_EjectRequired  = 0x0,
-                            PLD_CabinetNumber  = 0x0,
-                            PLD_CardCageNumber = 0x0,
-                            PLD_Reference      = 0x0,
-                            PLD_Rotation       = 0x0,
-                            PLD_Order          = 0x0)
-)  // _PLD: Physical Location of Device
+                        Name (_PLD, Package (0x10)  // _PLD: Physical Location of Device
+                        {
+                            0x81, 
+                            Zero, 
+                            Zero, 
+                            Zero, 
+                            Zero, 
+                            Zero, 
+                            Zero, 
+                            Zero, 
+                            0x30, 
+                            0x1C, 
+                            Zero, 
+                            Zero, 
+                            Zero, 
+                            Zero, 
+                            Zero, 
+                            Zero
+                        })
                         Device (GHUB)
                         {
                             Name (_ADR, One)  // _ADR: Address
@@ -5319,33 +5264,25 @@ DefinitionBlock ("DSDT.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000006)
                                 Zero, 
                                 Zero
                             })
-                            Name (_PLD, ToPLD (
-                                PLD_Revision       = 0x1,
-                                PLD_IgnoreColor    = 0x1,
-                                PLD_Red            = 0x0,
-                                PLD_Green          = 0x0,
-                                PLD_Blue           = 0x0,
-                                PLD_Width          = 0x0,
-                                PLD_Height         = 0x0,
-                                PLD_UserVisible    = 0x0,
-                                PLD_Dock           = 0x0,
-                                PLD_Lid            = 0x0,
-                                PLD_Panel          = "UNKNOWN",
-                                PLD_VerticalPosition = "UPPER",
-                                PLD_HorizontalPosition = "LEFT",
-                                PLD_Shape          = "UNKNOWN",
-                                PLD_GroupOrientation = 0x0,
-                                PLD_GroupToken     = 0x0,
-                                PLD_GroupPosition  = 0x0,
-                                PLD_Bay            = 0x0,
-                                PLD_Ejectable      = 0x0,
-                                PLD_EjectRequired  = 0x0,
-                                PLD_CabinetNumber  = 0x0,
-                                PLD_CardCageNumber = 0x0,
-                                PLD_Reference      = 0x0,
-                                PLD_Rotation       = 0x0,
-                                PLD_Order          = 0x0)
-)  // _PLD: Physical Location of Device
+                            Name (_PLD, Package (0x10)  // _PLD: Physical Location of Device
+                            {
+                                0x81, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                0x30, 
+                                0x1C, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero
+                            })
                         }
                     }
                 }
@@ -5562,33 +5499,25 @@ DefinitionBlock ("DSDT.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000006)
                             Zero, 
                             Zero
                         })
-                        Name (_PLD, ToPLD (
-                            PLD_Revision       = 0x1,
-                            PLD_IgnoreColor    = 0x1,
-                            PLD_Red            = 0x0,
-                            PLD_Green          = 0x0,
-                            PLD_Blue           = 0x0,
-                            PLD_Width          = 0x0,
-                            PLD_Height         = 0x0,
-                            PLD_UserVisible    = 0x0,
-                            PLD_Dock           = 0x0,
-                            PLD_Lid            = 0x0,
-                            PLD_Panel          = "UNKNOWN",
-                            PLD_VerticalPosition = "UPPER",
-                            PLD_HorizontalPosition = "LEFT",
-                            PLD_Shape          = "UNKNOWN",
-                            PLD_GroupOrientation = 0x0,
-                            PLD_GroupToken     = 0x0,
-                            PLD_GroupPosition  = 0x0,
-                            PLD_Bay            = 0x0,
-                            PLD_Ejectable      = 0x0,
-                            PLD_EjectRequired  = 0x0,
-                            PLD_CabinetNumber  = 0x0,
-                            PLD_CardCageNumber = 0x0,
-                            PLD_Reference      = 0x0,
-                            PLD_Rotation       = 0x0,
-                            PLD_Order          = 0x0)
-)  // _PLD: Physical Location of Device
+                        Name (_PLD, Package (0x10)  // _PLD: Physical Location of Device
+                        {
+                            0x81, 
+                            Zero, 
+                            Zero, 
+                            Zero, 
+                            Zero, 
+                            Zero, 
+                            Zero, 
+                            Zero, 
+                            0x30, 
+                            0x1C, 
+                            Zero, 
+                            Zero, 
+                            Zero, 
+                            Zero, 
+                            Zero, 
+                            Zero
+                        })
                         Device (PR30)
                         {
                             Name (_ADR, One)  // _ADR: Address
@@ -5599,33 +5528,25 @@ DefinitionBlock ("DSDT.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000006)
                                 Zero, 
                                 Zero
                             })
-                            Name (_PLD, ToPLD (
-                                PLD_Revision       = 0x1,
-                                PLD_IgnoreColor    = 0x1,
-                                PLD_Red            = 0x0,
-                                PLD_Green          = 0x0,
-                                PLD_Blue           = 0x0,
-                                PLD_Width          = 0x0,
-                                PLD_Height         = 0x0,
-                                PLD_UserVisible    = 0x1,
-                                PLD_Dock           = 0x0,
-                                PLD_Lid            = 0x0,
-                                PLD_Panel          = "FRONT",
-                                PLD_VerticalPosition = "",
-                                PLD_HorizontalPosition = "LEFT",
-                                PLD_Shape          = "UNKNOWN",
-                                PLD_GroupOrientation = 0x0,
-                                PLD_GroupToken     = 0x0,
-                                PLD_GroupPosition  = 0x0,
-                                PLD_Bay            = 0x0,
-                                PLD_Ejectable      = 0x0,
-                                PLD_EjectRequired  = 0x0,
-                                PLD_CabinetNumber  = 0x0,
-                                PLD_CardCageNumber = 0x0,
-                                PLD_Reference      = 0x0,
-                                PLD_Rotation       = 0x0,
-                                PLD_Order          = 0x0)
-)  // _PLD: Physical Location of Device
+                            Name (_PLD, Package (0x10)  // _PLD: Physical Location of Device
+                            {
+                                0x81, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                0xE1, 
+                                0x1C, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero
+                            })
                         }
                         Device (PR31)
                         {
@@ -5637,33 +5558,25 @@ DefinitionBlock ("DSDT.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000006)
                                 Zero, 
                                 Zero
                             })
-                            Name (_PLD, ToPLD (
-                                PLD_Revision       = 0x1,
-                                PLD_IgnoreColor    = 0x1,
-                                PLD_Red            = 0x0,
-                                PLD_Green          = 0x0,
-                                PLD_Blue           = 0x0,
-                                PLD_Width          = 0x0,
-                                PLD_Height         = 0x0,
-                                PLD_UserVisible    = 0x1,
-                                PLD_Dock           = 0x0,
-                                PLD_Lid            = 0x0,
-                                PLD_Panel          = "FRONT",
-                                PLD_VerticalPosition = "",
-                                PLD_HorizontalPosition = "CENTER",
-                                PLD_Shape          = "UNKNOWN",
-                                PLD_GroupOrientation = 0x0,
-                                PLD_GroupToken     = 0x0,
-                                PLD_GroupPosition  = 0x0,
-                                PLD_Bay            = 0x0,
-                                PLD_Ejectable      = 0x0,
-                                PLD_EjectRequired  = 0x0,
-                                PLD_CabinetNumber  = 0x0,
-                                PLD_CardCageNumber = 0x0,
-                                PLD_Reference      = 0x0,
-                                PLD_Rotation       = 0x0,
-                                PLD_Order          = 0x0)
-)  // _PLD: Physical Location of Device
+                            Name (_PLD, Package (0x10)  // _PLD: Physical Location of Device
+                            {
+                                0x81, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                0xE1, 
+                                0x1D, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero
+                            })
                         }
                         Device (PR32)
                         {
@@ -5675,33 +5588,25 @@ DefinitionBlock ("DSDT.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000006)
                                 Zero, 
                                 Zero
                             })
-                            Name (_PLD, ToPLD (
-                                PLD_Revision       = 0x1,
-                                PLD_IgnoreColor    = 0x1,
-                                PLD_Red            = 0x0,
-                                PLD_Green          = 0x0,
-                                PLD_Blue           = 0x0,
-                                PLD_Width          = 0x0,
-                                PLD_Height         = 0x0,
-                                PLD_UserVisible    = 0x1,
-                                PLD_Dock           = 0x0,
-                                PLD_Lid            = 0x0,
-                                PLD_Panel          = "FRONT",
-                                PLD_VerticalPosition = "",
-                                PLD_HorizontalPosition = "CENTER",
-                                PLD_Shape          = "UNKNOWN",
-                                PLD_GroupOrientation = 0x0,
-                                PLD_GroupToken     = 0x0,
-                                PLD_GroupPosition  = 0x0,
-                                PLD_Bay            = 0x0,
-                                PLD_Ejectable      = 0x0,
-                                PLD_EjectRequired  = 0x0,
-                                PLD_CabinetNumber  = 0x0,
-                                PLD_CardCageNumber = 0x0,
-                                PLD_Reference      = 0x0,
-                                PLD_Rotation       = 0x0,
-                                PLD_Order          = 0x0)
-)  // _PLD: Physical Location of Device
+                            Name (_PLD, Package (0x10)  // _PLD: Physical Location of Device
+                            {
+                                0x81, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                0xE1, 
+                                0x1D, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero
+                            })
                         }
                         Device (PR33)
                         {
@@ -5713,33 +5618,25 @@ DefinitionBlock ("DSDT.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000006)
                                 Zero, 
                                 Zero
                             })
-                            Name (_PLD, ToPLD (
-                                PLD_Revision       = 0x1,
-                                PLD_IgnoreColor    = 0x1,
-                                PLD_Red            = 0x0,
-                                PLD_Green          = 0x0,
-                                PLD_Blue           = 0x0,
-                                PLD_Width          = 0x0,
-                                PLD_Height         = 0x0,
-                                PLD_UserVisible    = 0x1,
-                                PLD_Dock           = 0x0,
-                                PLD_Lid            = 0x0,
-                                PLD_Panel          = "FRONT",
-                                PLD_VerticalPosition = "",
-                                PLD_HorizontalPosition = "RIGHT",
-                                PLD_Shape          = "UNKNOWN",
-                                PLD_GroupOrientation = 0x0,
-                                PLD_GroupToken     = 0x0,
-                                PLD_GroupPosition  = 0x0,
-                                PLD_Bay            = 0x0,
-                                PLD_Ejectable      = 0x0,
-                                PLD_EjectRequired  = 0x0,
-                                PLD_CabinetNumber  = 0x0,
-                                PLD_CardCageNumber = 0x0,
-                                PLD_Reference      = 0x0,
-                                PLD_Rotation       = 0x0,
-                                PLD_Order          = 0x0)
-)  // _PLD: Physical Location of Device
+                            Name (_PLD, Package (0x10)  // _PLD: Physical Location of Device
+                            {
+                                0x81, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                0xE1, 
+                                0x1E, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero
+                            })
                         }
                         Device (PR34)
                         {
@@ -5751,33 +5648,25 @@ DefinitionBlock ("DSDT.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000006)
                                 Zero, 
                                 Zero
                             })
-                            Name (_PLD, ToPLD (
-                                PLD_Revision       = 0x1,
-                                PLD_IgnoreColor    = 0x1,
-                                PLD_Red            = 0x0,
-                                PLD_Green          = 0x0,
-                                PLD_Blue           = 0x0,
-                                PLD_Width          = 0x0,
-                                PLD_Height         = 0x0,
-                                PLD_UserVisible    = 0x1,
-                                PLD_Dock           = 0x0,
-                                PLD_Lid            = 0x0,
-                                PLD_Panel          = "UNKNOWN",
-                                PLD_VerticalPosition = "LOWER",
-                                PLD_HorizontalPosition = "RIGHT",
-                                PLD_Shape          = "UNKNOWN",
-                                PLD_GroupOrientation = 0x0,
-                                PLD_GroupToken     = 0x0,
-                                PLD_GroupPosition  = 0x0,
-                                PLD_Bay            = 0x0,
-                                PLD_Ejectable      = 0x0,
-                                PLD_EjectRequired  = 0x0,
-                                PLD_CabinetNumber  = 0x0,
-                                PLD_CardCageNumber = 0x0,
-                                PLD_Reference      = 0x0,
-                                PLD_Rotation       = 0x0,
-                                PLD_Order          = 0x0)
-)  // _PLD: Physical Location of Device
+                            Name (_PLD, Package (0x10)  // _PLD: Physical Location of Device
+                            {
+                                0x81, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                0xB1, 
+                                0x1E, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero
+                            })
                         }
                         Device (PR35)
                         {
@@ -5789,33 +5678,25 @@ DefinitionBlock ("DSDT.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000006)
                                 Zero, 
                                 Zero
                             })
-                            Name (_PLD, ToPLD (
-                                PLD_Revision       = 0x1,
-                                PLD_IgnoreColor    = 0x1,
-                                PLD_Red            = 0x0,
-                                PLD_Green          = 0x0,
-                                PLD_Blue           = 0x0,
-                                PLD_Width          = 0x0,
-                                PLD_Height         = 0x0,
-                                PLD_UserVisible    = 0x1,
-                                PLD_Dock           = 0x0,
-                                PLD_Lid            = 0x0,
-                                PLD_Panel          = "UNKNOWN",
-                                PLD_VerticalPosition = "LOWER",
-                                PLD_HorizontalPosition = "RIGHT",
-                                PLD_Shape          = "UNKNOWN",
-                                PLD_GroupOrientation = 0x0,
-                                PLD_GroupToken     = 0x0,
-                                PLD_GroupPosition  = 0x0,
-                                PLD_Bay            = 0x0,
-                                PLD_Ejectable      = 0x0,
-                                PLD_EjectRequired  = 0x0,
-                                PLD_CabinetNumber  = 0x0,
-                                PLD_CardCageNumber = 0x0,
-                                PLD_Reference      = 0x0,
-                                PLD_Rotation       = 0x0,
-                                PLD_Order          = 0x0)
-)  // _PLD: Physical Location of Device
+                            Name (_PLD, Package (0x10)  // _PLD: Physical Location of Device
+                            {
+                                0x81, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                0xB1, 
+                                0x1E, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero
+                            })
                         }
                         Device (PR36)
                         {
@@ -5827,33 +5708,25 @@ DefinitionBlock ("DSDT.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000006)
                                 Zero, 
                                 Zero
                             })
-                            Name (_PLD, ToPLD (
-                                PLD_Revision       = 0x1,
-                                PLD_IgnoreColor    = 0x1,
-                                PLD_Red            = 0x0,
-                                PLD_Green          = 0x0,
-                                PLD_Blue           = 0x0,
-                                PLD_Width          = 0x0,
-                                PLD_Height         = 0x0,
-                                PLD_UserVisible    = 0x1,
-                                PLD_Dock           = 0x0,
-                                PLD_Lid            = 0x0,
-                                PLD_Panel          = "UNKNOWN",
-                                PLD_VerticalPosition = "LOWER",
-                                PLD_HorizontalPosition = "RIGHT",
-                                PLD_Shape          = "UNKNOWN",
-                                PLD_GroupOrientation = 0x0,
-                                PLD_GroupToken     = 0x0,
-                                PLD_GroupPosition  = 0x0,
-                                PLD_Bay            = 0x0,
-                                PLD_Ejectable      = 0x0,
-                                PLD_EjectRequired  = 0x0,
-                                PLD_CabinetNumber  = 0x0,
-                                PLD_CardCageNumber = 0x0,
-                                PLD_Reference      = 0x0,
-                                PLD_Rotation       = 0x0,
-                                PLD_Order          = 0x0)
-)  // _PLD: Physical Location of Device
+                            Name (_PLD, Package (0x10)  // _PLD: Physical Location of Device
+                            {
+                                0x81, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                0xB1, 
+                                0x1E, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero
+                            })
                         }
                         Device (PR37)
                         {
@@ -5865,33 +5738,25 @@ DefinitionBlock ("DSDT.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000006)
                                 Zero, 
                                 Zero
                             })
-                            Name (_PLD, ToPLD (
-                                PLD_Revision       = 0x1,
-                                PLD_IgnoreColor    = 0x1,
-                                PLD_Red            = 0x0,
-                                PLD_Green          = 0x0,
-                                PLD_Blue           = 0x0,
-                                PLD_Width          = 0x0,
-                                PLD_Height         = 0x0,
-                                PLD_UserVisible    = 0x0,
-                                PLD_Dock           = 0x0,
-                                PLD_Lid            = 0x0,
-                                PLD_Panel          = "UNKNOWN",
-                                PLD_VerticalPosition = "LOWER",
-                                PLD_HorizontalPosition = "RIGHT",
-                                PLD_Shape          = "UNKNOWN",
-                                PLD_GroupOrientation = 0x0,
-                                PLD_GroupToken     = 0x0,
-                                PLD_GroupPosition  = 0x0,
-                                PLD_Bay            = 0x0,
-                                PLD_Ejectable      = 0x0,
-                                PLD_EjectRequired  = 0x0,
-                                PLD_CabinetNumber  = 0x0,
-                                PLD_CardCageNumber = 0x0,
-                                PLD_Reference      = 0x0,
-                                PLD_Rotation       = 0x0,
-                                PLD_Order          = 0x0)
-)  // _PLD: Physical Location of Device
+                            Name (_PLD, Package (0x10)  // _PLD: Physical Location of Device
+                            {
+                                0x81, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                0xB0, 
+                                0x1E, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero
+                            })
                         }
                     }
                 }
@@ -7127,6 +6992,32 @@ DefinitionBlock ("DSDT.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000006)
         AOTB = OSFL ()
         AAXB = Zero
         \_SB.SLPS = One
+    }
+    Method (DTGP, 5, NotSerialized)
+    {
+        If ((Arg0 == ToUUID ("a0b5b7c6-1318-441c-b0c9-fe695eaf949b")))
+        {
+            If ((Arg1 == One))
+            {
+                If ((Arg2 == Zero))
+                {
+                    Arg4 = Buffer (One)
+                        {
+                             0x03                                             /* . */
+                        }
+                    Return (One)
+                }
+                If ((Arg2 == One))
+                {
+                    Return (One)
+                }
+            }
+        }
+        Arg4 = Buffer (One)
+            {
+                 0x00                                             /* . */
+            }
+        Return (Zero)
     }
     Method (_WAK, 1, NotSerialized)  // _WAK: Wake
     {
